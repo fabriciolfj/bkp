@@ -1,0 +1,42 @@
+version: '3'
+services:
+  localstack:
+    container_name: agreementterm_localstack
+    image: localstack/localstack:0.11.2
+    networks:
+      - my-network
+    ports:
+      - "4566-4597:4566-4597"
+      - "${PORT_WEB_UI-8888}:${PORT_WEB_UI-8080}"
+    environment:
+      - SERVICES=${SERVICES- }
+      - DEBUG=${DEBUG- }
+      - DATA_DIR=${DATA_DIR- }
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
+      - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY- }
+      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOST_TMP_FOLDER=${TMPDIR}
+    volumes:
+      - "./src/main/resources/aws/services:/docker-entrypoint-initaws.d"
+      - "./src/main/resources/aws/healthcheck:/health-check-scripts"
+      - '/var/run/docker.sock:/var/run/docker.sock'
+
+  wiremock:
+    container_name: agreementterm_wiremock
+    networks:
+      - my-network
+    image: rodolpheche/wiremock
+    ports:
+      - "7771:8080"
+    volumes:
+      - ./src/test/resources/wiremock:/home/wiremock
+    command: ["--print-all-network-traffic"]
+
+
+networks:
+  my-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.57.0/24
