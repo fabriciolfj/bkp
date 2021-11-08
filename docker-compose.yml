@@ -1,7 +1,7 @@
 version: '3'
 services:
   localstack:
-    container_name: agreementterm_localstack
+    container_name: localstack
     image: localstack/localstack:0.11.2
     networks:
       - my-network
@@ -23,7 +23,7 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock'
 
   wiremock:
-    container_name: agreementterm_wiremock
+    container_name: wiremock
     networks:
       - my-network
     image: rodolpheche/wiremock
