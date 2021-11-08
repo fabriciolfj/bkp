@@ -35,7 +35,7 @@ ReadCapacityUnits=5,WriteCapacityUnits=5 \
 
 check_services () {
   TABLES_OUTPUT="$(awslocal dynamodb list-tables)"
-  if [[ $TABLES_OUTPUT == *"termosaceite"*]]; then
+  if [[ $TABLES_OUTPUT == *"example"*]]; then
     echo "$TABLES_OUTPUT"
     echo "$QUEUES_OUTPUT"
     return 0
